@@ -13,10 +13,10 @@ struct ContentView: View {
     ///DEC | BIN CONVERSIONS
     
     
-    func BinToDec()-> Int{
+    func BinToDec(strinp:String)-> String{
         var Output = 0
         var powcount = 0
-        var input = Int(Input) ?? 0
+        var input = Int(strinp) ?? 0
         while(input > 0){
             if (input % 10 == 1){
                 Output += Int(pow(2.0,Double(powcount)))
@@ -24,13 +24,13 @@ struct ContentView: View {
             powcount += 1
             input = input/10
         }
-        return Output
+        return String(Output)
     }
     
     
-    func DecToBin()-> String{
+    func DecToBin(strinp:String)-> String{
         var Output = ""
-        var input = Int(Input) ?? 0
+        var input = Int(strinp) ?? 0
         
         while (input > 0){
             Output = String(input%2) + Output
@@ -43,9 +43,9 @@ struct ContentView: View {
     
     /// DEC HEX CONVERSIONS
     
-    func DecToHex()-> String{
+    func DecToHex(strinp:String)-> String{
         var Output = ""
-        var input = Int(Input) ?? 0
+        var input = Int(strinp) ?? 0
         
         let TenArray = ["A","B","C","D","E","F"]
         
@@ -65,9 +65,89 @@ struct ContentView: View {
         return Output
     }
     
+    func HexToDec(strinp:String)-> String{
+        var Output = 0
+        let input = strinp.reversed()
+        var step = 1
+        
+        for i in input{
+            if i == "A"{
+                Output += step*10
+            }
+            else if i == "B"{
+                Output += step*11
+            }
+            else if i == "C"{
+                Output += step*12
+            }
+            else if i == "D"{
+                Output += step*13
+            }
+            else if i == "E"{
+                Output += step*14
+            }
+            else if i == "F"{
+                Output += step*15
+            }
+            else {
+                Output += (Int(String(i)) ?? 1 )*step
+            }
+            step = step*16
+
+        }
+        return String(Output)
+    }
     
     
+    /// BUTTON SWITCHES
     
+    func buttonWorks()->String{
+        let input = Input
+        let from = InputSel
+        let to = OutputSel
+        
+        var Output = ""
+        
+        if from == "Binary"{
+            if to == "Binary"{
+                Output = input
+            }
+            else if to == "Decimal"{
+                Output = BinToDec(strinp: input)
+            }
+            else if to == "Hexadecimal"{
+                Output = DecToHex(strinp: BinToDec(strinp: input))
+             }
+        }
+        else if from == "Decimal"{
+            if to == "Binary"{
+                Output = DecToBin(strinp: input)
+            }
+            else if to == "Decimal"{
+                Output = input            }
+            else if to == "Hexadecimal"{
+                Output = DecToHex(strinp: input)
+             }
+        }
+        else if from == "Hexadecimal"{
+            if to == "Binary"{
+                Output = DecToBin(strinp: HexToDec(strinp: input))
+            }
+            else if to == "Decimal"{
+                Output = HexToDec(strinp: input)            }
+            else if to == "Hexadecimal"{
+                Output = input
+             }
+        }
+        else if from == "Select"
+        {
+            Output = ""
+        }
+        
+        
+        
+        return Output
+    }
     
     
     
@@ -109,8 +189,7 @@ struct ContentView: View {
             Text("Output")
             TextField("Input", text: $Output).disabled(true)
             Button("Convert"){
-                Output = String(DecToHex())
-            }
+                Output = buttonWorks()            }
                 
                 
         }
